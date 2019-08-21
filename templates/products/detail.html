@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}
+    {{ object.title }}
+{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-6">
+            <small>{{ object.created_at|timesince }} ago</small>
+            <h2>{{ object.title }}</h2>
+            <img src="{{ object.image.url }}" width="500">
+            <p>{{ object.description|linebreaks }}</p>
+        </div>
+        <div class="col-12 col-md-6">
+            {% include "products/snippets/update-cart.html" with product=object cart=cart %}
+        </div>
+    </div>
+{% endblock %}

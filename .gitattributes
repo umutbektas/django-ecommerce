@@ -1,0 +1,8 @@
+* text=auto
+*.css linguist-vendored
+*.html linguist-vendored
+*.scss linguist-vendored
+*.js linguist-vendored
+CHANGELOG.md export-ignore
+
+media/* linguist-vendored
