@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models.signals import pre_save, post_save
 
 from carts.models import Cart
-from ecommerce.utils import unique_order_id_generator
+from ecommerce.utils import unique_order_code_generator
 
 
 ORDER_STATUS_CHOICES = (
@@ -14,14 +14,14 @@ ORDER_STATUS_CHOICES = (
 
 
 class Order(models.Model):
-    order_id = models.CharField(max_length=120, blank=True)
+    order_code = models.CharField(max_length=120, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=False)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(max_digits=30, decimal_places=4, default=10)
     order_total = models.DecimalField(max_digits=30, decimal_places=4, default=0)
 
     def __str__(self):
-        return self.order_id
+        return self.order_code
 
     def update_total(self):
         cart_total = self.cart.total
@@ -32,13 +32,13 @@ class Order(models.Model):
         return new_total
 
 
-def pre_save_create_order_id(sender, instance, *args, **kwargs):
-    if not instance.order_id:
-        instance.order_id = unique_order_id_generator(instance)
+def pre_save_create_order_code(sender, instance, *args, **kwargs):
+    if not instance.order_code:
+        instance.order_code = unique_order_code_generator(instance)
         instance.save()
 
 
-pre_save.connect(pre_save_create_order_id, sender=Order)
+pre_save.connect(pre_save_create_order_code, sender=Order)
 
 
 def post_save_cart_total(sender, instance, created, *args, **kwargs):
