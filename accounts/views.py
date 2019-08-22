@@ -25,12 +25,15 @@ def register_page(request):
 
 
 def login_page(request):
+    if request.user.is_authenticated:
+        return redirect('home_url')
+
     form = LoginForm(request.POST or None)
     context = {
         "form": form
     }
     next_ = request.GET.get('next')
-    next_post = request.GET.get('next')
+    next_post = request.GET.post('next')
     redirect_path = next_ or next_post or None
 
     if form.is_valid():
