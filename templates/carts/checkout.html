@@ -5,8 +5,26 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Checkout</h1>
-    <p>Cart Total: {{ object.cart.total }}</p>
-    <p>Shipping Total: {{ object.shipping_total }}</p>
-    <p>Total: {{ object.order_total }}</p>
+
+    {% if not billing_profile %}
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <p class="lead text-center"><b>Login</b></p>
+                     <div class="row d-flex justify-content-center">
+                        <div class="col-6">
+                            {% include "accounts/snippets/login_form.html" with form=login_form next_url=request.build_absolute_uri %}
+                        </div>
+                    </div>
+            </div>
+            <div class="col-12 col-md-6 text-center">
+                <b>Continue as Guest</b>
+            </div>
+        </div>
+    {% else %}
+        <h1>Checkout</h1>
+        <p>Cart Total: {{ object.cart.total }}</p>
+        <p>Shipping Total: {{ object.shipping_total }}</p>
+        <p>Total: {{ object.order_total }}</p>
+    {% endif %}
+
 {% endblock %}

@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect
 from products.models import Product
 from .models import Cart
 from orders.models import Order
+from ecommerce.utils import unique_order_code_generator
+from accounts.forms import LoginForm
+from billing.models import BillingProfile
 
 
 def cart_home(request):
@@ -37,5 +40,23 @@ def checkout_home(request):
     if cart_created or cart_obj.products.count() == 0:
         return redirect("carts:home")
     else:
-        order_obj, new_order_obj = Order.objects.get_or_create(cart=cart_obj)
-    return render(request, "carts/checkout.html", {"object": order_obj})
+        order_obj, new_order_obj = Order.objects.get_or_create(
+            cart=cart_obj,
+            defaults={
+                'cart': cart_obj,
+                'order_code': unique_order_code_generator(Order())
+            }
+        )
+
+    user = request.user
+    billing_profile = None
+    if user.is_authenticated:
+        billing_profile, billing_profile_created = BillingProfile.objects.get_or_create(user=user, email=user.email)
+
+    context = {
+        "object": order_obj,
+        "billing_profile": billing_profile,
+        'login_form': LoginForm()
+    }
+
+    return render(request, "carts/checkout.html", context)

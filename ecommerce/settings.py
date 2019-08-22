@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'search',
     'tags',
     'orders',
+    'billing',
 ]
 # Application definition
 
