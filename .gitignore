@@ -90,3 +90,5 @@ db.sqlite3
 .idea
 .vscode
 uploads
+
+evenv
