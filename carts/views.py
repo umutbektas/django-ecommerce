@@ -40,15 +40,6 @@ def checkout_home(request):
     order_obj = None
     if cart_created or cart_obj.products.count() == 0:
         return redirect("carts:home")
-    else:
-        order_obj, new_order_obj = Order.objects.get_or_create(
-            cart=cart_obj,
-            defaults={
-                'cart': cart_obj,
-                'order_code': unique_order_code_generator(Order())
-            }
-        )
-
     user = request.user
     billing_profile = None
     guest_email_id = request.session.get('guest_email_id')
@@ -61,6 +52,20 @@ def checkout_home(request):
 
     else:
         pass
+
+    if billing_profile is not None:
+        order_qs = Order.objects.filter(billing_profile=billing_profile, cart=cart_obj, active=True)
+        if order_qs.exists():
+            order_obj = order_qs.first()
+        else:
+            older_order_qs = Order.objects.exclude(billing_profile=billing_profile).filter(cart=cart_obj, active=True)
+            if older_order_qs.exists():
+                older_order_qs.update(active=False)
+            order_obj = Order.objects.create(
+                billing_profile=billing_profile,
+                order_code=unique_order_code_generator(Order()),
+                cart=cart_obj
+            )
 
     context = {
         'object': order_obj,

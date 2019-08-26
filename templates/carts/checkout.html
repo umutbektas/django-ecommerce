@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block content %}
-
+{{ object.order_code }} -- {{ object.cart.id }}
     {% if not billing_profile %}
         <div class="row">
             <div class="col-12 col-md-6">

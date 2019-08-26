@@ -1,8 +1,10 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save
 
+from billing.models import BillingProfile
 from carts.models import Cart
 from ecommerce.utils import unique_order_code_generator
+from decimal import Decimal
 
 
 ORDER_STATUS_CHOICES = (
@@ -14,11 +16,13 @@ ORDER_STATUS_CHOICES = (
 
 
 class Order(models.Model):
+    billing_profile = models.ForeignKey(BillingProfile, on_delete=models.SET_NULL, null=True, blank=True)
     order_code = models.CharField(max_length=120, blank=True)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=False)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(max_digits=30, decimal_places=4, default=10)
     order_total = models.DecimalField(max_digits=30, decimal_places=4, default=0)
+    active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.order_code
@@ -26,7 +30,7 @@ class Order(models.Model):
     def update_total(self):
         cart_total = self.cart.total
         shipping_total = self.shipping_total
-        new_total = cart_total + shipping_total
+        new_total = Decimal(cart_total) + Decimal(shipping_total)
         self.order_total = new_total
         self.save()
         return new_total
