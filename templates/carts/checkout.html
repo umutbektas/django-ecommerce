@@ -18,6 +18,12 @@
             </div>
             <div class="col-12 col-md-6 text-center">
                 <b>Continue as Guest</b>
+                 <div class="row d-flex justify-content-center">
+                    <div class="col-6">
+                        {% url 'accounts:guest_register' as guest_register_url %}
+                        {% include "accounts/snippets/login_form.html" with form=guest_form next_url=request.build_absolute_uri action_url=guest_register_url %}
+                    </div>
+                 </div>
             </div>
         </div>
     {% else %}
