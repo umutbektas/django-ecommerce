@@ -8,6 +8,9 @@
 <div class="row d-flex justify-content-center">
     <div class="col-6">
         <form method="POST">{% csrf_token %}
+        {% if next_url %}
+            <input type="hidden" name="next" value="{{ next_url }}">
+        {% endif %}
         <div class="form-group">
             {{ form.as_p }}
         </div>
