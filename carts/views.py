@@ -2,10 +2,9 @@ from django.shortcuts import render, redirect
 from products.models import Product
 from .models import Cart
 from orders.models import Order
-from ecommerce.utils import unique_order_code_generator
 from accounts.forms import LoginForm, GuestForm
 from billing.models import BillingProfile
-from accounts.models import GuestEmail
+from addresses.forms import AddressForm
 
 
 def cart_home(request):
@@ -50,6 +49,7 @@ def checkout_home(request):
         'billing_profile': billing_profile,
         'login_form': LoginForm(),
         'guest_form': GuestForm(),
+        'address_form': AddressForm(),
     }
 
     return render(request, "carts/checkout.html", context)

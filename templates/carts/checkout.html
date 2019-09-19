@@ -6,6 +6,7 @@
 
 {% block content %}
 {{ object.order_code }} -- {{ object.cart.id }}
+
     {% if not billing_profile %}
         <div class="row">
             <div class="col-12 col-md-6">
@@ -27,10 +28,32 @@
             </div>
         </div>
     {% else %}
-        <h1>Checkout</h1>
-        <p>Cart Total: {{ object.cart.total }}</p>
-        <p>Shipping Total: {{ object.shipping_total }}</p>
-        <p>Total: {{ object.order_total }}</p>
+
+        {% if not object.shipping_address %}
+             <div class="row d-flex justify-content-center">
+                <div class="col-6">
+                    <p class="lead">Shipping Address</p>
+                    <hr>
+                    {% url 'addresses:checkout_create_view' as checkout_create_view %}
+                    {% include "addresses/snippets/form.html" with form=address_form next_url=request.build_absolute_uri action_url=checkout_create_view address_type='shipping' %}
+                </div>
+             </div>
+        {% elif not object.billing_address %}
+             <div class="row d-flex justify-content-center">
+                <div class="col-6">
+                    <p class="lead">Billing Address</p>
+                    <hr>
+                    {% url 'addresses:checkout_create_view' as checkout_create_view %}
+                    {% include "addresses/snippets/form.html" with form=address_form next_url=request.build_absolute_uri action_url=checkout_create_view address_type='billing' %}
+                </div>
+             </div>
+        {% else %}
+            <h1>Checkout</h1>
+            <p>Cart Total: {{ object.cart.total }}</p>
+            <p>Shipping Total: {{ object.shipping_total }}</p>
+            <p>Total: {{ object.order_total }}</p>
+            <button>Checkout</button>
+        {% endif %}
     {% endif %}
 
 {% endblock %}

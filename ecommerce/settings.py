@@ -42,12 +42,12 @@ INSTALLED_APPS = [
     'products',
     'search',
     'tags',
-    'orders',
     'billing',
+    'orders',
+    'addresses',
 ]
+
 # Application definition
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
