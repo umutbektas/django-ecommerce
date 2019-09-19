@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load l10n %}
 
 {% block title %}
     Checkout
@@ -49,10 +50,12 @@
              </div>
         {% else %}
             <h1>Checkout</h1>
-            <p>Cart Total: {{ object.cart.total }}</p>
-            <p>Shipping Total: {{ object.shipping_total }}</p>
-            <p>Total: {{ object.order_total }}</p>
-            <button>Checkout</button>
+            <p>Cart Total: {{ object.cart.total|floatformat:2|localize }}</p>
+            <p>Shipping Total: {{ object.shipping_total|floatformat:2|localize }}</p>
+            <p>Total: {{ object.order_total|floatformat:2|localize }}</p>
+            <form class="form" method="post" action="">{% csrf_token %}
+                <button type="submit">Checkout</button>
+            </form>
         {% endif %}
     {% endif %}
 
