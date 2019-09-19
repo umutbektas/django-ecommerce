@@ -79,3 +79,10 @@ def checkout_home(request):
     }
 
     return render(request, "carts/checkout.html", context)
+
+
+def checkout_done_view(request):
+    context = {
+        "order_code": request.POST.get('order_code')
+    }
+    return render(request, "carts/checkout-done.html", context)

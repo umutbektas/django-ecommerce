@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load l10n %}
+
+{% block title %}
+    Checkout Done
+{% endblock %}
+
+{% block content %}
+    <div class="col-6 mx-auto py-5 text-center">
+        <h1 class="display-1"> Thank you for your order.</h1>
+        <p><b>Order Code: </b> {{ order_code }}</p>
+        <a class="btn btn-info" href="{% url 'home_url' %}"> Return Home</a>
+    </div>
+{% endblock %}

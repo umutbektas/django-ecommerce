@@ -62,11 +62,19 @@
              </div>
         {% else %}
             <h1>Checkout</h1>
+            <p>Cart Items:
+                {% for prodcut in object.cart.products.all %}
+                    {{ prodcut }} {% if not forloop.last %},{% endif %}
+                {% endfor %}
+            </p>
             <p>Cart Total: {{ object.cart.total|floatformat:2|localize }}</p>
+            <p>Shipping Address: {{ object.shipping_address.get_address|safe }}</p>
+            <p>Billing Address: {{ object.billing_address.get_address|safe }}</p>
             <p>Shipping Total: {{ object.shipping_total|floatformat:2|localize }}</p>
             <p>Total: {{ object.order_total|floatformat:2|localize }}</p>
-            <form class="form" method="post" action="">{% csrf_token %}
-                <button type="submit">Checkout</button>
+            <form class="form" method="post" action="{% url 'carts:checkout' %}">{% csrf_token %}
+                <input type="hidden" name="order_code" value="{{ object.order_code }}">
+                <button type="submit" class="btn btn-success">Checkout</button>
             </form>
         {% endif %}
     {% endif %}
