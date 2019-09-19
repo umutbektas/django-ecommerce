@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models.signals import pre_save, post_save
-
+from addresses.models import Address
 from billing.models import BillingProfile
 from carts.models import Cart
 from ecommerce.utils import unique_order_code_generator
@@ -31,6 +31,8 @@ class OrderManager(models.Manager):
 class Order(models.Model):
     billing_profile = models.ForeignKey(BillingProfile, on_delete=models.SET_NULL, null=True, blank=True)
     order_code = models.CharField(max_length=120, blank=True)
+    shipping_address = models.ForeignKey(Address, related_name='shipping_address', null=True, blank=True, on_delete=models.SET_NULL)
+    billing_address = models.ForeignKey(Address, related_name='billing_address', null=True, blank=True, on_delete=models.SET_NULL)
     cart = models.ForeignKey(Cart, on_delete=models.SET_NULL, null=True, blank=False)
     status = models.CharField(max_length=120, default='created', choices=ORDER_STATUS_CHOICES)
     shipping_total = models.DecimalField(max_digits=30, decimal_places=4, default=10)

@@ -19,4 +19,4 @@ class Address(models.Model):
     postal_code = models.CharField(max_length=120)
 
     def __str__(self):
-        return str(self.billing_profile)
+        return str(self.billing_profile) + ' : ' + str(self.address_type).upper()
