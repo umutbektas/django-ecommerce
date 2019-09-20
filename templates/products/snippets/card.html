@@ -6,6 +6,9 @@
       <small>{{ instance.created_at|timesince }} ago</small>
       <h5 class="card-title">{{ instance.title }}</h5>
     <p class="card-text">{{ instance.description|truncatewords:15 }}</p>
-    <a href="{{ instance.get_absolute_url }}" class="btn btn-primary">Detail</a>
+    <div class="col">
+        <a href="{{ instance.get_absolute_url }}" class="btn btn-primary mb-2">Detail</a>
+        {% include "products/snippets/update-cart.html" with product=instance cart=cart %}
+    </div>
   </div>
 </div>

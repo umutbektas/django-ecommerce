@@ -7,6 +7,23 @@ from accounts.forms import LoginForm, GuestForm
 from billing.models import BillingProfile
 from addresses.forms import AddressForm
 from addresses.models import Address
+from decimal import Decimal
+
+
+def cart_detail_api_view(request):
+    cart_obj, new_obj = Cart.objects.new_or_get(request)
+    products = [{
+        'id': x.id,
+        'url': x.get_absolute_url(),
+        'title': x.title,
+        'price': format(x.price, '.2f')
+    } for x in cart_obj.products.all()]
+    cart_data = {
+        'products': products,
+        'subTotal': format(cart_obj.subtotal, '.2f'),
+        'total': format(cart_obj.total, '.2f')
+    }
+    return JsonResponse(cart_data, status=200)
 
 
 def cart_home(request):
@@ -53,13 +70,6 @@ def cart_update(request):
                 'cartItemCount': cart_obj.products.count(),
             }
             return JsonResponse(json_data)
-
-        # If it comes from the cart page it will return
-        if request.POST.get('in_cart'):
-            return redirect("carts:home")
-
-        # If it comes from the product page it will return
-        return redirect(product_obj.get_absolute_url())
 
     # no product_id in post request
     return redirect("carts:home")

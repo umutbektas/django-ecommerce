@@ -8,7 +8,7 @@
 {% block content %}
     <h1>Cart</h1>
     {% if cart.products.exists %}
-        <table class="table">
+        <table class="table cart-table">
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -17,34 +17,40 @@
               <th scope="col">Edit</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="cart-body">
             {% for product in cart.products.all %}
-                <tr>
+                <tr class="cart-products">
                   <th scope="row">{{ forloop.counter }}</th>
                   <td><a href="{% url 'products:detail' product.slug %}">{{product.title}}</a></td>
                   <td>{{product.price|floatformat:2|localize }}</td>
                   <td>
-                     {% include "products/snippets/update-cart.html" with product=product cart=cart in_cart=True %}
+                     {% include "carts/snippets/remove-product.html" with product_id=product.id cart=cart %}
                   </td>
                 </tr>
             {% endfor %}
-
-          <tr>
-              <td colspan="3"></td>
-              <td><b>Subtotal: </b> {{ cart.subtotal|floatformat:2|localize }}</td>
-          </tr>
-          <tr>
-              <td colspan="3"></td>
-              <td><b>Total: </b> {{ cart.total|floatformat:2|localize }}</td>
-          </tr>
-          <tr>
-              <td colspan="3"></td>
-              <td><a class="btn btn-block btn-success" href="{% url 'carts:checkout' %}">Checkout</a></td>
-          </tr>
-
+            <tr>
+                <td colspan="3"></td>
+                <td><b>Subtotal: </b> <span class="cart-subTotal">{{ cart.subtotal|floatformat:2|localize }}</span> ₺</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td><b>Total: </b> <span class="cart-total">{{ cart.total|floatformat:2|localize }}</span> ₺</td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td><a class="btn btn-block btn-success" href="{% url 'carts:checkout' %}">Checkout</a></td>
+            </tr>
           </tbody>
         </table>
+
+        <div class="cart-item-remove-form" style="display: none">
+            {% include 'carts/snippets/remove-product.html' %}
+        </div>
     {% else %}
         <p class="lead">Cart is empty.</p>
     {% endif %}
+{% endblock %}
+
+{% block bottom %}
+    {% include 'carts/snippets/cart-ajax.html' %}
 {% endblock %}
