@@ -13,7 +13,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item {% if request.path == cart_home_url %}active{% endif %}">
-        <a class="nav-link" href="{% url 'carts:home' %}">{{ request.session.cart_items }} <i class="fas fa-shopping-cart"></i></a>
+        <a class="nav-link nav-cart-count" href="{% url 'carts:home' %}">{{ request.session.cart_items }} <i class="fas fa-shopping-cart"></i></a>
       </li>
       <li class="nav-item {% if request.path == products_list_url %}active{% endif %}">
         <a class="nav-link" href="{% url "products:list" %}">Products</a>

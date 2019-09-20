@@ -50,6 +50,7 @@ def cart_update(request):
             json_data = {
                 'added': product_added,
                 'removed': not product_added,
+                'cartItemCount': cart_obj.products.count(),
             }
             return JsonResponse(json_data)
 
