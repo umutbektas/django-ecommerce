@@ -16,3 +16,37 @@
         </div>
     </div>
 {% endblock %}
+
+{% block bottom %}
+    <script>
+        $(document).ready(function () {
+            var productForm = $('.form-product-ajax');
+            productForm.submit(function (e) {
+                e.preventDefault();
+                let thisForm = $(this);
+                let actionEndPoint = thisForm.attr('action');
+                let httpMethod = thisForm.attr('method');
+                let formData = thisForm.serialize();
+                
+                $.ajax({
+                    url: actionEndPoint,
+                    method: httpMethod,
+                    data: formData,
+                    success: function (data) {
+                        let submitSpan = thisForm.find('.submit-span');
+                        if (data.added && data.removed === false) {
+                            submitSpan.html('In Cart <button type="submit" class="btn btn-link">Remove ?</button>');
+                        }
+                        if (data.removed && data.added === false) {
+                            submitSpan.html('<button type="submit" class="btn btn-success">Add to cart</button>');
+                        }
+                    },
+                    error: function (errorData) {
+                        console.log("error");
+                        console.log(errorData);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

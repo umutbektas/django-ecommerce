@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from products.models import Product
 from .models import Cart
@@ -16,22 +17,50 @@ def cart_home(request):
 def cart_update(request):
     product_id = request.POST.get('product_id')
     if product_id is not None:
+
+        # get product or return cart page
         try:
             product_obj = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
+            # ajax error response
+            if request.is_ajax():
+                json_data = {
+                    'added': False,
+                    'removed': False,
+                }
+                return JsonResponse(json_data, status=409)
+
             return redirect("carts:home")
 
         cart_obj, new_obj = Cart.objects.new_or_get(request)
-        if product_obj in cart_obj.products.all():
-            cart_obj.products.remove(product_obj)
-        else:
-            cart_obj.products.add(product_obj)
 
+        if product_obj in cart_obj.products.all():
+            # remove product cart
+            cart_obj.products.remove(product_obj)
+            product_added = False
+        else:
+            # add product cart
+            cart_obj.products.add(product_obj)
+            product_added = True
+
+        # cart product count update
         request.session['cart_items'] = cart_obj.products.count()
 
+        if request.is_ajax():
+            json_data = {
+                'added': product_added,
+                'removed': not product_added,
+            }
+            return JsonResponse(json_data)
+
+        # If it comes from the cart page it will return
         if request.POST.get('in_cart'):
             return redirect("carts:home")
+
+        # If it comes from the product page it will return
         return redirect(product_obj.get_absolute_url())
+
+    # no product_id in post request
     return redirect("carts:home")
 
 
