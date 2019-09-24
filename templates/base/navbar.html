@@ -3,6 +3,7 @@
 {% url "accounts:logout" as logout_url %}
 {% url "accounts:login" as login_url %}
 {% url "accounts:register" as register_url %}
+{% load static %}
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-5">
   <a class="navbar-brand" href="/">{{ site_title }}</a>
@@ -42,9 +43,6 @@
       </li>
      {% endif %}
     </ul>
-    <form method="GET" action="{% url 'search:products' %}" class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" placeholder="Search" aria-label="Search" name="q">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    {% include 'search/snippets/search-form.html' %}
   </div>
 </nav>
