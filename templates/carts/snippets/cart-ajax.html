@@ -30,8 +30,11 @@
                     }
                 },
                 error: function (errorData) {
-                    console.log("error");
-                    console.log(errorData);
+                    $.alert({
+                        title: 'Oops !',
+                        content: errorData,
+                        theme: 'modern',
+                    });
                 }
             });
 
@@ -74,8 +77,11 @@
                         }
                     },
                     error: function (errorData) {
-                        console.log('error');
-                        console.log(errorData);
+                        $.alert({
+                            title: 'Oops !',
+                            content: errorData,
+                            theme: 'modern',
+                        });
                     }
                 });
             }

@@ -69,7 +69,7 @@ def cart_update(request):
                 'removed': not product_added,
                 'cartItemCount': cart_obj.products.count(),
             }
-            return JsonResponse(json_data)
+            return JsonResponse(json_data, status=200)
 
     # no product_id in post request
     return redirect("carts:home")
