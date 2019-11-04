@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model, authenticate, login
 from .forms import RegisterForm, LoginForm, GuestForm
 from .models import GuestEmail
 from django.utils.http import is_safe_url
+from django.contrib import messages
 
 User = get_user_model()
 
@@ -52,7 +53,7 @@ def login_page(request):
             else:
                 return redirect('home_url')
         else:
-            print("Login error")
+            messages.warning(request, 'Credentials error.')
 
     return render(request, "accounts/login.html", context)
 
