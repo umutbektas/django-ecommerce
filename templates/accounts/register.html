@@ -7,6 +7,18 @@
 {% block content %}
 <div class="row d-flex justify-content-center">
     <div class="col-6">
+        {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                    <div class="alert alert-{% if message.tags %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+                      {{ message }}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                {% endfor %}
+            </ul>
+        {% endif %}
         <form method="POST">{% csrf_token %}
         {% if next_url %}
             <input type="hidden" name="next" value="{{ next_url }}">

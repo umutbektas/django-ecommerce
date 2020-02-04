@@ -15,12 +15,12 @@ def register_page(request):
     }
     if form.is_valid():
         data = form.cleaned_data
-        username = data.get('username')
         email = data.get('email')
         password = data.get('password')
-        new_user = User.objects.create_user(username, email, password)
+        new_user = User.objects.create_user(email, password)
         if new_user is None:
-            print("Create Error !")
+            messages.warning(request, "Create Error !")
+        messages.success(request, "Created User.")
 
     return render(request, "accounts/register.html", context)
 
@@ -39,9 +39,9 @@ def login_page(request):
 
     if form.is_valid():
         data = form.cleaned_data
-        username = data.get('username')
+        email = data.get('email')
         password = data.get('password')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             try:

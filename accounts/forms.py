@@ -52,7 +52,7 @@ class UserAdminChangeForm(forms.ModelForm):
 
 
 class LoginForm(forms.Form):
-    username = forms.CharField(
+    email = forms.CharField(
         widget=forms.TextInput(
             attrs={
                 "class": "form-control",
@@ -71,14 +71,6 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                "class": "form-control",
-                "placeholder": "E-Mail"
-            }
-        )
-    )
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
