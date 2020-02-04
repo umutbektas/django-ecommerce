@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import (
-    AbstractBaseUser, BaseUserManager
+    AbstractBaseUser, BaseUserManager, PermissionsMixin
 )
 
 
@@ -39,10 +39,11 @@ class UserManager(BaseUserManager):
         return user_obj
 
 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(
         null=False,
         blank=False,
+        unique=True,
         max_length=80,
         verbose_name='Email'
     )
@@ -86,8 +87,8 @@ class User(AbstractBaseUser):
         return self.staff
 
     @property
-    def is_admin(self):
-        return self.admin
+    def is_superuser(self):
+        return self.superuser
 
 
 

@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'addresses',
 ]
 
+AUTH_USER_MODEL = 'accounts.User'   # changes the built-in user model to ours
+
 # Application definition
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -112,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
 
-LANGUAGE_CODE = 'tr'
+LANGUAGE_CODE = 'en'
 
 TIME_ZONE = 'Europe/Istanbul'
 
