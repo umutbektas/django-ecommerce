@@ -10,17 +10,22 @@ User = get_user_model()
 
 def register_page(request):
     form = RegisterForm(request.POST or None)
-    context = {
-        "form": form
-    }
+
     if form.is_valid():
         data = form.cleaned_data
         email = data.get('email')
         password = data.get('password')
-        new_user = User.objects.create_user(email, password)
+        first_name = data.get('first_name')
+        last_name = data.get('last_name')
+        new_user = User.objects.create_user(email, password, first_name, last_name)
         if new_user is None:
             messages.warning(request, "Create Error !")
         messages.success(request, "Created User.")
+        return redirect('accounts:login')
+
+    context = {
+        "form": form
+    }
 
     return render(request, "accounts/register.html", context)
 

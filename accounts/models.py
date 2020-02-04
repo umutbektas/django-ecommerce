@@ -5,14 +5,16 @@ from django.contrib.auth.models import (
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None, is_active=True, is_staff=False, is_superuser=False):
+    def create_user(self, email, password=None, first_name=None, last_name=None, is_active=True, is_staff=False, is_superuser=False):
         if not email:
             raise ValueError('Users must have an email address')
         if not password:
             raise ValueError('Users must have a password')
 
         user_obj = self.model(
-            email=self.normalize_email(email)
+            email=self.normalize_email(email),
+            first_name=first_name,
+            last_name=last_name
         )
         user_obj.active = is_active
         user_obj.staff = is_staff
@@ -82,10 +84,14 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_short_name(self):
-        return self.first_name
+        if self.first_name:
+            return self.first_name
+        return self.email
 
     def get_full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        return self.email
 
     @property
     def is_active(self):

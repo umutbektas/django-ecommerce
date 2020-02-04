@@ -71,6 +71,24 @@ class LoginForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
+    first_name = forms.CharField(
+        label='First Name',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "First Name"
+            }
+        )
+    )
+    last_name = forms.CharField(
+        label='Last Name',
+        widget=forms.TextInput(
+            attrs={
+                "class": "form-control",
+                "placeholder": "Last Name"
+            }
+        )
+    )
     email = forms.EmailField(
         widget=forms.EmailInput(
             attrs={
