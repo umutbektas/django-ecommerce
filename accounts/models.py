@@ -1,7 +1,43 @@
 from django.db import models
 from django.contrib.auth.models import (
-    AbstractBaseUser
+    AbstractBaseUser, BaseUserManager
 )
+
+
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, is_active=True, is_staff=False, is_superuser=False):
+        if not email:
+            raise ValueError('Users must have an email address')
+        if not password:
+            raise ValueError('Users must have a password')
+
+        user_obj = self.model(
+            email=self.normalize_email(email)
+        )
+        user_obj.active = is_active
+        user_obj.staff = is_staff
+        user_obj.superuser = is_superuser
+        user_obj.set_password(password)    # change user password
+        user_obj.save(using=self._db)
+        return user_obj
+
+    def create_staff_user(self, email, password=None):
+        user_obj = self.create_user(
+            email,
+            password=password,
+            is_staff=True
+        )
+        return user_obj
+
+    def create_superuser(self, email, password=None):
+        user_obj = self.create_user(
+            email,
+            password=password,
+            is_staff=True,
+            is_superuser=True
+        )
+        return user_obj
+
 
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -24,14 +60,16 @@ class User(AbstractBaseUser):
         default=False,
         verbose_name='Is Staff'
     )
-    admin = models.BooleanField(
+    superuser = models.BooleanField(
         default=False,
-        verbose_name='Is Admin'
+        verbose_name='Is Super User'
     )
 
     USERNAME_FIELD = 'email'    # username
     # USERNAME_FIELD and password are required by default
     REQUIRED_FIELDS = []    # python manage.py createsuperuser
+
+    objects = UserManager()
 
     def __str__(self):
         return self.email
