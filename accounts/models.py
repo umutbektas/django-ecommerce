@@ -47,11 +47,17 @@ class User(AbstractBaseUser, PermissionsMixin):
         max_length=80,
         verbose_name='Email'
     )
-    full_name = models.CharField(
+    first_name = models.CharField(
         null=True,
         blank=True,
         max_length=80,
-        verbose_name='Full Name'
+        verbose_name='First Name'
+    )
+    last_name = models.CharField(
+        null=True,
+        blank=True,
+        max_length=80,
+        verbose_name='Last Name'
     )
     active = models.BooleanField(
         default=True,
@@ -75,8 +81,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+    def get_short_name(self):
+        return self.first_name
+
     def get_full_name(self):
-        return self.full_name
+        return f"{self.first_name} {self.last_name}"
 
     @property
     def is_active(self):
