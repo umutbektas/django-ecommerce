@@ -66,6 +66,7 @@ class Product(models.Model):
     featured = models.BooleanField(default=False)
     active = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    inventory = models.IntegerField(default=0)
 
     # Manager
     objects = ProductManager()
